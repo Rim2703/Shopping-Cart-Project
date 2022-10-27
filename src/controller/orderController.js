@@ -89,11 +89,6 @@ const updateOrder = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Status should be only "completed" or "cancelled"' })
         }
 
-        const cartId = await cartModel.findOne({ _id: cartId, userId: userId })
-        if (!cartId) {
-            return res.status(404).send({ status: false, message: `Cart does not exist for this Id ${userId}` })
-        }
-
         const userOrder = await orderModel.findOne({ _id: orderId, userId })
         if (!userOrder) {
             return res.status(404).send({ status: false, message: `Order does not exist for this Id ${userId}` })     //here using template literal

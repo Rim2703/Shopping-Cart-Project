@@ -18,7 +18,7 @@ router.post("/register", createUser)
 
 router.post("/login", userLogin)
 
-router.get("/user/:userId/profile", authentication, authorization, getUser)
+router.get("/user/:userId/profile", authentication, getUser)
 
 router.put("/user/:userId/profile", authentication, authorization, updateUser)
 

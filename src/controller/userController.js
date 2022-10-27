@@ -124,7 +124,7 @@ const getUser = async function (req, res) {
 
         let user = await userModel.findById(userId)
         if (!user) {
-            return res.status(404).send({ status: false, message: "user not found" })
+            return res.status(404).send({ status: false, message: "user not found!!!!" })
         }
 
         return res.status(200).send({ status: true, message: 'User profile details', data: user })

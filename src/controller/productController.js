@@ -45,7 +45,7 @@ const createProduct = async function (req, res) {
         if (image && image.length == 0)
             return res.status(400).send({ status: false, message: "Profile Image is required" });
         else if (!check.isValidImage(image[0].originalname))
-            return res.status(400).send({status: false, message: "Profile Image is required as an Image format"});
+            return res.status(400).send({ status: false, message: "Profile Image is required as an Image format" });
         else data.productImage = await uploadFile(image[0]);
 
         if (style) {
@@ -81,7 +81,8 @@ const getProducts = async function (req, res) {
         let queries = req.query;
 
         let getProducts = await productModel.find({ isDeleted: false })
-        if (Object.keys(queries).length == 0) return res.status(200).send({ status: true, message: "enter some some data for get product" })
+
+        if (Object.keys(queries).length == 0) return res.status(200).send({ status: true, data: getProducts })
 
         if (getProducts.length == 0) {
             return res.status(404).send({ status: false, message: "No product found" })
@@ -103,12 +104,15 @@ const getProducts = async function (req, res) {
                 return combination.length == 0 ? res.status(404).send({ status: false, message: "No product found" }) : res.status(200).send({ status: true, message: "Success", data: combination })
 
             }
+            if (queries.priceGreaterThan && queries.priceLessThan) {
+                let combination = await productModel.find({ price: { $lt: queries.priceLessThan, $gt: queries.priceGreaterThan } })
+                return combination.length == 0 ? res.status(404).send({ status: false, message: "No product found" }) : res.status(200).send({ status: true, message: "Success", data: combination })
+
+            }
             if (queries.size) {
                 let sizes = queries.size.split(',')
                 let getbySize = await productModel.find({ isDeleted: false, availableSizes: { $in: sizes } })
                 return getbySize.length == 0 ? res.status(404).send({ status: false, message: "No product found" }) : res.status(200).send({ status: true, message: "Success", data: getbySize })
-
-
             }
 
             if (queries.name) {
